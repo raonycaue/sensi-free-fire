@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sensi FF Android – Moto G54</title>
+  <style>
+    :root {
+      --bg:#0b0f14; --card:#121826; --txt:#e5e7eb; --muted:#9ca3af; --accent:#22c55e;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto; background:linear-gradient(180deg,#0b0f14,#05070a); color:var(--txt)}
+    header{padding:24px 16px;text-align:center}
+    header h1{margin:0;font-size:1.6rem}
+    header p{margin:.4rem 0 0;color:var(--muted)}
+    .wrap{max-width:980px;margin:0 auto;padding:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .card{background:var(--card);border-radius:16px;padding:16px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+    .card h3{margin:.2rem 0 .6rem}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#1f2937;color:#d1fae5;border:1px solid #064e3b;font-size:.75rem}
+    .list{list-style:none;padding:0;margin:8px 0 0}
+    .list li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #1f2937}
+    .list li span{color:var(--muted)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    button{background:#0f172a;border:1px solid #1f2937;color:var(--txt);padding:10px 14px;border-radius:12px;cursor:pointer}
+    button.primary{background:linear-gradient(135deg,#22c55e,#16a34a);border:none;color:#022c22}
+    button:active{transform:scale(.98)}
+    .panel{margin-top:16px}
+    .panel h2{font-size:1.2rem}
+    .note{font-size:.85rem;color:var(--muted)}
+    footer{padding:20px 16px;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sensibilidade Free Fire – Android (Moto G54)</h1>
+    <p>Combinações avançadas de sensi (legais, sem hacks) para diferentes estilos de mira</p>
+  </header>  <main class="wrap">
+    <div class="controls">
+      <button onclick="render('baixa')">Baixa</button>
+      <button onclick="render('media')">Média</button>
+      <button onclick="render('alta')">Alta</button>
+      <button onclick="render('muitoAlta')" class="primary">Muito Alta</button>
+    </div><section id="cards" class="grid"></section>
+
+<section class="panel card">
+  <h2>Ajustes do Dispositivo (Moto G54)</h2>
+  <ul class="list">
+    <li><strong>DPI recomendado</strong><span id="dpi"></span></li>
+    <li><strong>Tamanho do botão de tiro</strong><span id="btn"></span></li>
+    <li><strong>Taxa de atualização</strong><span>120 Hz (se disponível)</span></li>
+    <li><strong>Aceleração do sistema</strong><span>Desativada</span></li>
+  </ul>
+  <p class="note">* Ajustes baseados em testes comunitários. Resultados variam por mão e estilo.</p>
+</section>
+
+  </main>  <footer>Projeto experimental • Não usa exploits, macros ou modificações proibidas</footer>  <script>
+    const presets = {
+      baixa: {
+        dpi: 420, btn: '48%', sets: [
+          {name:'Controle Fino', tag:'Precisão', v:{Geral:85, RedDot:80, Mira2x:70, Mira4x:60, AWM:45, Olhadinha:60}},
+          {name:'Headshot Seguro', tag:'Estável', v:{Geral:90, RedDot:85, Mira2x:75, Mira4x:65, AWM:50, Olhadinha:65}},
+        ]
+      },
+      media: {
+        dpi: 480, btn: '52%', sets: [
+          {name:'Equilibrada Pro', tag:'Balance', v:{Geral:95, RedDot:90, Mira2x:80, Mira4x:70, AWM:55, Olhadinha:70}},
+          {name:'Rush Preciso', tag:'Rush', v:{Geral:100, RedDot:92, Mira2x:82, Mira4x:72, AWM:58, Olhadinha:72}},
+        ]
+      },
+      alta: {
+        dpi: 520, btn: '56%', sets: [
+          {name:'Swipe Rápido', tag:'Speed', v:{Geral:105, RedDot:98, Mira2x:88, Mira4x:78, AWM:62, Olhadinha:78}},
+          {name:'Capacete Zero', tag:'Aggro', v:{Geral:110, RedDot:100, Mira2x:90, Mira4x:80, AWM:65, Olhadinha:80}},
+        ]
+      },
+      muitoAlta: {
+        dpi: 560, btn: '60%', sets: [
+          {name:'Micro‑Swipe', tag:'Insano', v:{Geral:115, RedDot:108, Mira2x:98, Mira4x:88, AWM:70, Olhadinha:85}},
+          {name:'One‑Tap Lab', tag:'Experimental', v:{Geral:120, RedDot:112, Mira2x:100, Mira4x:90, AWM:72, Olhadinha:88}},
+        ]
+      }
+    };
+
+    function cardHTML(p){
+      return `<div class="card">
+        <span class="badge">${p.tag}</span>
+        <h3>${p.name}</h3>
+        <ul class="list">
+          ${Object.entries(p.v).map(([k,v])=>`<li><strong>${k}</strong><span>${v}</span></li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    function render(key){
+      const d = presets[key];
+      document.getElementById('dpi').textContent = d.dpi;
+      document.getElementById('btn').textContent = d.btn;
+      document.getElementById('cards').innerHTML = d.sets.map(cardHTML).join('');
+    }
+
+    render('muitoAlta');
+  </script></body>
+</html>
