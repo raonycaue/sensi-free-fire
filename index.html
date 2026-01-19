@@ -39,7 +39,10 @@
       <button onclick="render('baixa')">Baixa</button>
       <button onclick="render('media')">Média</button>
       <button onclick="render('alta')">Alta</button>
-      <button onclick="render('muitoAlta')" class="primary">Muito Alta</button>
+      <button onclick="render('muitoAlta')">Muito Alta</button>
+      <button onclick="randomize()" class="primary">Gerar Combinação INSANA</button>
+      <button onclick="copySensi()">Copiar Sensi</button>
+      <button onclick="detect()">Detector: Boa ou Ruim</button>
     </div><section id="cards" class="grid"></section>
 
 <section class="panel card">
@@ -56,27 +59,27 @@
   </main>  <footer>Projeto experimental • Não usa exploits, macros ou modificações proibidas</footer>  <script>
     const presets = {
       baixa: {
-        dpi: 420, btn: '48%', sets: [
-          {name:'Controle Fino', tag:'Precisão', v:{Geral:85, RedDot:80, Mira2x:70, Mira4x:60, AWM:45, Olhadinha:60}},
-          {name:'Headshot Seguro', tag:'Estável', v:{Geral:90, RedDot:85, Mira2x:75, Mira4x:65, AWM:50, Olhadinha:65}},
+        dpi: 600, btn: '50%', sets: [
+          {name:'Controle Fino+', tag:'Precisão', v:{Geral:120, RedDot:115, Mira2x:105, Mira4x:95, AWM:80, Olhadinha:100}},
+          {name:'Headshot Seguro+', tag:'Estável', v:{Geral:130, RedDot:120, Mira2x:110, Mira4x:100, AWM:85, Olhadinha:105}},
         ]
       },
       media: {
-        dpi: 480, btn: '52%', sets: [
-          {name:'Equilibrada Pro', tag:'Balance', v:{Geral:95, RedDot:90, Mira2x:80, Mira4x:70, AWM:55, Olhadinha:70}},
-          {name:'Rush Preciso', tag:'Rush', v:{Geral:100, RedDot:92, Mira2x:82, Mira4x:72, AWM:58, Olhadinha:72}},
+        dpi: 750, btn: '55%', sets: [
+          {name:'Equilibrada Pro X', tag:'Balance', v:{Geral:145, RedDot:135, Mira2x:125, Mira4x:115, AWM:95, Olhadinha:120}},
+          {name:'Rush Preciso X', tag:'Rush', v:{Geral:155, RedDot:140, Mira2x:130, Mira4x:120, AWM:100, Olhadinha:125}},
         ]
       },
       alta: {
-        dpi: 520, btn: '56%', sets: [
-          {name:'Swipe Rápido', tag:'Speed', v:{Geral:105, RedDot:98, Mira2x:88, Mira4x:78, AWM:62, Olhadinha:78}},
-          {name:'Capacete Zero', tag:'Aggro', v:{Geral:110, RedDot:100, Mira2x:90, Mira4x:80, AWM:65, Olhadinha:80}},
+        dpi: 900, btn: '60%', sets: [
+          {name:'Swipe Rápido Ultra', tag:'Speed', v:{Geral:170, RedDot:155, Mira2x:145, Mira4x:135, AWM:110, Olhadinha:140}},
+          {name:'Capacete Zero X', tag:'Aggro', v:{Geral:180, RedDot:165, Mira2x:150, Mira4x:140, AWM:115, Olhadinha:145}},
         ]
       },
       muitoAlta: {
-        dpi: 560, btn: '60%', sets: [
-          {name:'Micro‑Swipe', tag:'Insano', v:{Geral:115, RedDot:108, Mira2x:98, Mira4x:88, AWM:70, Olhadinha:85}},
-          {name:'One‑Tap Lab', tag:'Experimental', v:{Geral:120, RedDot:112, Mira2x:100, Mira4x:90, AWM:72, Olhadinha:88}},
+        dpi: 1000, btn: '65%', sets: [
+          {name:'Micro‑Swipe 1000DPI', tag:'Insano', v:{Geral:190, RedDot:175, Mira2x:165, Mira4x:155, AWM:125, Olhadinha:160}},
+          {name:'One‑Tap LAB 200', tag:'Experimental', v:{Geral:200, RedDot:185, Mira2x:170, Mira4x:160, AWM:130, Olhadinha:165}},
         ]
       }
     };
@@ -99,5 +102,71 @@
     }
 
     render('muitoAlta');
+
+    function randomize(){
+      const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+      window._last = {
+        dpi: rand(500,1000),
+        btn: rand(45,70)+'%',
+        v:{
+          Geral: rand(120,200),
+          RedDot: rand(110,190),
+          Mira2x: rand(100,180),
+          Mira4x: rand(90,170),
+          AWM: rand(70,140),
+          Olhadinha: rand(100,170)
+        }
+      };
+      document.getElementById('dpi').textContent = _last.dpi;
+      document.getElementById('btn').textContent = _last.btn;
+      document.getElementById('cards').innerHTML = `
+        <div class="card">
+          <span class="badge">Aleatória</span>
+          <h3>Combinação Gerada</h3>
+          <ul class="list">
+            ${Object.entries(_last.v).map(([k,v])=>`<li><strong>${k}</strong><span>${v}</span></li>`).join('')}
+          </ul>
+          <p class="note">Use como base. Ajuste fino conforme sua pegada.</p>
+        </div>`;
+    }
+
+    function copySensi(){
+      const d = window._last;
+      if(!d){ alert('Gere ou selecione uma sensi primeiro'); return; }
+      const txt = `DPI: ${d.dpi}
+Botão: ${d.btn}
+`+
+        Object.entries(d.v).map(([k,v])=>`${k}: ${v}`).join('
+');
+      navigator.clipboard.writeText(txt).then(()=>alert('Sensibilidade copiada!'));
+    }
+
+    function detect(){
+      const d = window._last;
+      if(!d){ alert('Gere ou selecione uma sensi primeiro'); return; }
+      // Heurística simples e segura
+      let score = 0;
+      if(d.dpi>=700 && d.dpi<=950) score+=2; else score-=1;
+      if(d.v.Geral>=140 && d.v.Geral<=185) score+=2; else score-=1;
+      if(Math.abs(d.v.RedDot-d.v.Geral)<=25) score+=1; else score-=1;
+      if(d.v.AWM<=140) score+=1; else score-=1;
+      const res = score>=3 ? 'BOA' : 'RUIM';
+      document.getElementById('cards').insertAdjacentHTML('afterbegin',
+        `<div class="card"><span class="badge">Detector</span><h3>Resultado: ${res}</h3>
+        <p class="note">Avaliação automática baseada em estabilidade, controle e consistência.</p></div>`);
+    }
+      };
+      document.getElementById('dpi').textContent = combo.dpi;
+      document.getElementById('btn').textContent = combo.btn;
+      document.getElementById('cards').innerHTML = `
+        <div class="card">
+          <span class="badge">Aleatória</span>
+          <h3>Combinação Gerada</h3>
+          <ul class="list">
+            ${Object.entries(combo.v).map(([k,v])=>`<li><strong>${k}</strong><span>${v}</span></li>`).join('')}
+          </ul>
+          <p class="note">Sugestão de ajustes do celular: usar taxa de 120Hz, reduzir animações do sistema, manter TalkBack e Acesso por Interruptor DESATIVADOS (ativar apenas para teste), e sensibilidade do ponteiro no máximo.</p>
+        </div>`;
+    }
   </script></body>
 </html>
